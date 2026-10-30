@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512"><defs>
+<radialGradient id="gL2" cx="100" cy="405" r="330" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#f7e9a8"/><stop offset=".22" stop-color="#f7e9a8"/><stop offset=".62" stop-color="#2d8a5e"/><stop offset="1" stop-color="#0f4d33"/></radialGradient>
+<filter id="shL2" x="-30%" y="-30%" width="160%" height="160%"><feGaussianBlur stdDeviation="16"/></filter>
+<filter id="glL2" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="40"/></filter>
+<clipPath id="sqL2"><rect width="512" height="512" rx="114"/></clipPath><clipPath id="cpL2"><path d="M266.1 111.6Q256 92 245.9 111.6L102.1 390.4Q92 410 114.0 410.0L398.0 410.0Q420 410 409.9 390.4ZM251.7 203.1Q248 196 244.1 203.0L153.9 365.0Q150 372 158.0 372.0L332.0 372.0Q340 372 336.3 364.9Z" fill-rule="evenodd" clip-rule="evenodd"/></clipPath>
+<linearGradient id="hlL2" x1="0" y1="0" x2="0.6" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".85"/><stop offset=".35" stop-color="#fff" stop-opacity=".12"/><stop offset=".7" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#fff" stop-opacity=".45"/></linearGradient>
+<linearGradient id="flL2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".32"/><stop offset=".45" stop-color="#fff" stop-opacity=".02"/><stop offset="1" stop-color="#fff" stop-opacity=".10"/></linearGradient>
+<linearGradient id="dkL2" x1="1" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".18"/></linearGradient>
+</defs>
+<g clip-path="url(#sqL2)"><rect width="512" height="512" fill="#000"/>
+<path d="M266.1 111.6Q256 92 245.9 111.6L102.1 390.4Q92 410 114.0 410.0L398.0 410.0Q420 410 409.9 390.4ZM251.7 203.1Q248 196 244.1 203.0L153.9 365.0Q150 372 158.0 372.0L332.0 372.0Q340 372 336.3 364.9Z" fill-rule="evenodd" fill="#2d8a5e" opacity=".22" filter="url(#glL2)"/>
+<g clip-path="url(#cpL2)"><rect width="512" height="512" fill="url(#gL2)"/><rect width="512" height="512" fill="url(#dkL2)"/><rect width="512" height="512" fill="url(#flL2)"/></g>
+<path d="M266.1 111.6Q256 92 245.9 111.6L102.1 390.4Q92 410 114.0 410.0L398.0 410.0Q420 410 409.9 390.4ZM251.7 203.1Q248 196 244.1 203.0L153.9 365.0Q150 372 158.0 372.0L332.0 372.0Q340 372 336.3 364.9Z" fill-rule="evenodd" fill="none" stroke="url(#hlL2)" stroke-width="5"/></g></svg>

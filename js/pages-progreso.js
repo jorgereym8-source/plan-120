@@ -104,7 +104,7 @@
 
   A.pages.progreso = {
     render(sub) {
-      sub = sub || 'peso'; const S = A.S; let h = '<h2 class="ptitle">' + A.icon('📈') + 'Progreso</h2>';
+      sub = sub || 'peso'; const S = A.S; let h = '<h2 class="ptitle">' + 'Progreso</h2>';
       h += A.seg(sub, [['peso', 'Peso'], ['medidas', 'Medidas'], ['fotos', 'Fotos'], ['revision', 'Revisión'], ['datos', 'Datos']], 'progreso');
       const ser = A.weightSeries(); const ma = A.movingAvg(ser, 7); const sw = A.startWeight(); const start = S.profile.startDate;
 
@@ -188,7 +188,7 @@
 
   A.pages.ajustes = {
     render(sub) {
-      sub = sub || 'perfil'; const S = A.S, st = S.settings; let h = '<h2 class="ptitle">' + A.icon('⚙️') + 'Ajustes</h2>';
+      sub = sub || 'perfil'; const S = A.S, st = S.settings; let h = '<h2 class="ptitle">' + 'Ajustes</h2>';
       h += A.seg(sub, [['perfil', 'Perfil'], ['tema', 'Colores'], ['estilo', 'Estilo'], ['texto', 'Texto'], ['nav', 'Navegación'], ['extra', 'Comportamiento']], 'ajustes');
       if (sub === 'perfil') {
         const pr = S.profile;

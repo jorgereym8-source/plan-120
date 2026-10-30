@@ -62,7 +62,7 @@
 
   A.pages.entreno = {
     render(sub) {
-      sub = sub || 'sesion'; const S = A.S; let h = '<h2 class="ptitle">' + A.icon('🏋️') + 'Entreno de fuerza</h2>';
+      sub = sub || 'sesion'; const S = A.S; let h = '<h2 class="ptitle">' + 'Entreno de fuerza</h2>';
       h += A.seg(sub, [['sesion', 'Sesión'], ['rutinas', 'Rutinas'], ['historial', 'Historial'], ['guia', 'Guía']], 'entreno');
       if (sub === 'sesion') {
         const aw = S.activeWorkout;
@@ -172,7 +172,7 @@
 
   A.pages.carrera = {
     render(sub) {
-      sub = sub || 'hoy'; const S = A.S; const lv = P.runLevels.find((x) => x.lvl === S.run.level) || P.runLevels[0]; let h = '<h2 class="ptitle">' + A.icon('🏃') + 'Carrera</h2>';
+      sub = sub || 'hoy'; const S = A.S; const lv = P.runLevels.find((x) => x.lvl === S.run.level) || P.runLevels[0]; let h = '<h2 class="ptitle">' + 'Carrera</h2>';
       h += A.seg(sub, [['hoy', 'Próxima'], ['niveles', 'Niveles'], ['historial', 'Historial'], ['guia', 'Guía']], 'carrera');
       if (sub === 'hoy') {
         const ph = runPhases(lv);
@@ -215,7 +215,7 @@
 
   A.pages.bienestar = {
     render(sub) {
-      sub = sub || 'movilidad'; const S = A.S; let h = '<h2 class="ptitle">' + A.icon('🧘') + 'Bienestar</h2>';
+      sub = sub || 'movilidad'; const S = A.S; let h = '<h2 class="ptitle">' + 'Bienestar</h2>';
       h += A.seg(sub, [['movilidad', 'Movilidad'], ['respira', 'Respiración'], ['medita', 'Meditación'], ['sueno', 'Sueño']], 'bienestar');
       if (sub === 'movilidad') {
         ['weekly', 'daily'].forEach((k) => { const m = P.mobility[k]; const tot = stepPhases(m.steps).reduce((s, p) => s + p.dur, 0); h += '<div class="card"><div class="card-h"><h3>' + esc(m.name) + '</h3><span class="pill">≈ ' + Math.round(tot / 60) + ' min</span></div>' + (m.when ? '<p class="muted small">' + esc(m.when) + '</p>' : '') + '<ol class="ticks small">' + m.steps.map((s) => '<li><b>' + esc(s.name) + '</b> · ' + (s.side ? A.mmss(s.dur) + ' por lado' : A.mmss(s.dur)) + '<br><span class="muted">' + esc(s.cue) + '</span></li>').join('') + '</ol><button class="btn" data-act="mobStart" data-w="' + k + '">▶ Empezar guiada</button></div>'; });

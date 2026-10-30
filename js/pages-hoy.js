@@ -124,7 +124,7 @@
 
   A.pages.plan = {
     render(sub) {
-      sub = sub || 'ruta'; let h = '<h2 class="ptitle">' + A.icon('🗺️') + 'Plan de 120 días</h2>';
+      sub = sub || 'ruta'; let h = '<h2 class="ptitle">' + 'Plan de 120 días</h2>';
       h += A.seg(sub, [['ruta', 'Hoja de ruta'], ['reglas', 'Situaciones'], ['habitos', 'Hábitos'], ['ajustes', 'Ajustes'], ['despues', 'Día 121+']], 'plan');
       const S = A.S; const sw = A.startWeight(); const curW = A.weekN();
       if (sub === 'ruta') {

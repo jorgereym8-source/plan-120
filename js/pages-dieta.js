@@ -114,7 +114,7 @@
 
   A.pages.dieta = {
     render(sub) {
-      sub = sub || 'semana'; const S = A.S; const T = S.targets; let h = '<h2 class="ptitle">' + A.icon('🥗') + 'Dieta</h2>';
+      sub = sub || 'semana'; const S = A.S; const T = S.targets; let h = '<h2 class="ptitle">' + 'Dieta</h2>';
       h += A.seg(sub, [['semana', 'Menú'], ['recetas', 'Recetas'], ['compra', 'Compra'], ['objetivos', 'Objetivos'], ['alimentos', 'Alimentos']], 'dieta');
       const SN = SLOTN();
 

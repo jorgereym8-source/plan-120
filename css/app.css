@@ -94,9 +94,10 @@ body[data-btn="glass"] .btn:not(.danger) { background: rgba(var(--text-rgb), .12
 .row.gap { justify-content: flex-start; gap: 10px; flex-wrap: wrap; }
 .row.wrap { flex-wrap: wrap; }
 .grow { flex: 1; }
-.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 0 12px; }
-.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0 10px; }
-@media (max-width: 420px) { .grid3 { grid-template-columns: 1fr 1fr; } }
+.grid2 { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 0 12px; }
+.grid2 > *, .grid3 > * { min-width: 0; }
+.grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0 10px; }
+@media (max-width: 420px) { .grid3 { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); } }
 
 /* ---------- segmentado ---------- */
 .seg { display: flex; gap: 4px; overflow-x: auto; background: rgba(var(--text-rgb), .06); padding: 4px; border-radius: calc(var(--btn-radius) + 4px); margin-bottom: var(--gap); scrollbar-width: none; position: sticky; top: calc(var(--safe-t) + 4px); z-index: 5; backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); }
@@ -106,7 +107,9 @@ body[data-nav="top"] .seg { top: calc(var(--safe-t) + 78px); }
 .seg a.on { background: var(--card-solid); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,.2); }
 
 /* ---------- formularios ---------- */
-.fld { display: block; margin: 8px 0; position: relative; }
+.fld { display: block; margin: 8px 0; position: relative; min-width: 0; }
+input[type="date"], input[type="time"] { display: block; min-width: 0; max-width: 100%; -webkit-appearance: none; appearance: none; min-height: 44px; text-align: left; }
+input::-webkit-date-and-time-value { text-align: left; }
 .fld > span { display: block; font-size: .78rem; color: var(--muted); margin-bottom: 4px; font-weight: 600; }
 .fld > em { position: absolute; right: 12px; bottom: 11px; font-style: normal; color: var(--muted); font-size: .8rem; pointer-events: none; }
 input, select, textarea { width: 100%; font: inherit; font-size: 16px; color: var(--text); background: rgba(var(--text-rgb), .07); border: 1px solid var(--line); border-radius: calc(var(--btn-radius) * .8); padding: 10px 12px; outline: none; }
