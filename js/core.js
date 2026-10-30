@@ -331,11 +331,24 @@
   };
 
   /* ---------------- enrutado ---------------- */
-  App.tabs = {
-    hoy: { name: 'Hoy', icon: '☀️' }, dieta: { name: 'Dieta', icon: '🥗' }, entreno: { name: 'Entreno', icon: '🏋️' },
-    carrera: { name: 'Carrera', icon: '🏃' }, progreso: { name: 'Progreso', icon: '📈' }, bienestar: { name: 'Bienestar', icon: '🧘' },
-    plan: { name: 'Plan 120', icon: '🗺️' }, ajustes: { name: 'Ajustes', icon: '⚙️' }, mas: { name: 'Más', icon: '☰' }
+  /* Iconos vectoriales minimalistas (trazo, heredan el color del texto) */
+  const svg = (d) => '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + d + '</svg>';
+  App.svgIcons = {
+    hoy: svg('<path d="M12 21.2s-6.4-5.5-6.4-11a6.4 6.4 0 0 1 12.8 0c0 5.5-6.4 11-6.4 11z"/><circle cx="12" cy="10.2" r="2.3"/>'),
+    dieta: svg('<path d="M18.6 15.6c-.9 2.6-2.6 5-4.3 5-.9 0-1.4-.5-2.3-.5s-1.4.5-2.3.5c-2.4 0-5.1-4.6-5.1-8.6 0-3.3 2-5.4 4.4-5.4 1.2 0 2.2.6 3 .6s1.8-.6 3-.6c1 0 1.9.3 2.6.9a2.6 2.6 0 0 0-.4 4.2 2.6 2.6 0 0 0 1.4 3.9z"/><path d="M12 7.6V3.8"/><path d="M12.2 5.4c.9-1.7 2.4-2.4 4.3-2.2-.5 1.8-2.1 2.6-4.3 2.2z"/>'),
+    entreno: svg('<path d="M8.6 10.2 7.9 7.1A2.3 2.3 0 0 1 10.1 4.3h3.8a2.3 2.3 0 0 1 2.2 2.8l-.7 3.1"/><path d="M7 20.6h10a6.3 6.3 0 1 0-10 0z"/>'),
+    carrera: svg('<circle cx="12" cy="13.6" r="7.2"/><path d="M10 2.8h4M12 2.8v3.6M12 13.6l3-3M18.4 6.9l1.4-1.4"/>'),
+    progreso: svg('<path d="M12 20V4.5M5.5 11 12 4.5 18.5 11"/>'),
+    bienestar: svg('<path d="M5 19.5c0-8.3 5-13.6 14.5-14.5-.8 9.5-6.2 14.5-14.5 14.5z"/><path d="M5 19.5 12.5 12"/>'),
+    plan: svg('<path d="M3.5 6.5 9 4.2l6 2.3 5.5-2.3v13.3L15 19.8l-6-2.3-5.5 2.3z"/><path d="M9 4.2v13.3M15 6.5v13.3"/>'),
+    ajustes: svg('<path d="M4 7h9M17 7h3M4 12h3M11 12h9M4 17h11M19 17h1"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="12" r="2"/><circle cx="17" cy="17" r="2"/>'),
+    mas: svg('<path d="M4 7h16M4 12h16M4 17h16"/>')
   };
+  App.tabs = {
+    hoy: { name: 'Hoy' }, dieta: { name: 'Dieta' }, entreno: { name: 'Entreno' }, carrera: { name: 'Carrera' }, progreso: { name: 'Progreso' },
+    bienestar: { name: 'Bienestar' }, plan: { name: 'Plan 120' }, ajustes: { name: 'Ajustes' }, mas: { name: 'Más' }
+  };
+  Object.keys(App.tabs).forEach((k) => { App.tabs[k].icon = App.svgIcons[k]; });
   App.route = function () { const h = (location.hash || '#hoy').slice(1).split('/'); return { page: h[0] || 'hoy', sub: h[1] || '' }; };
   App.go = function (page, sub) { location.hash = '#' + page + (sub ? '/' + sub : ''); };
   App.render = function () {
