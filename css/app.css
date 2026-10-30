@@ -319,3 +319,6 @@ body[data-anim="1"] #main > *:nth-child(4) { animation-delay: .09s; } body[data-
 body[data-anim="0"] *, body[data-anim="0"] *::before, body[data-anim="0"] *::after { transition: none !important; animation: none !important; }
 @keyframes rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
 @media (prefers-reduced-motion: reduce) { body #main > * { animation: none !important; } }
+
+.cas { color: var(--accent); font-size: .76rem; }
+.cas-row { border-bottom: 1px solid var(--line); font-size: .82rem; } .cas-row b { font-weight: 600; text-align: right; }

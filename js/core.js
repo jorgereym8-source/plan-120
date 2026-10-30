@@ -27,7 +27,7 @@
   /* ---------------- estado ---------------- */
   function defaults() {
     return {
-      v: 1,
+      v: 1, planV: P.version,
       profile: { name: '', startDate: P.defaultStart, height: 180, age: 30, sex: 'h', startWeight: null, startWaist: null, activity: 1.4 },
       targets: clone(P.targets),
       targetHistory: [],
@@ -69,8 +69,20 @@
     return out;
   }
 
+  /* Migración: cuando cambian los datos del plan, se actualizan recetas, alimentos y menú por defecto
+     sin tocar los registros (pesos, sesiones, fotos…) ni las recetas propias. */
+  function migrate(S) {
+    if ((S.planV || 0) >= P.version) return S;
+    Object.keys(P.foods).forEach((k) => { if (!S.foods[k]) S.foods[k] = clone(P.foods[k]); else S.foods[k].cas = clone(P.foods[k].cas); });
+    const own = S.recipes.filter((r) => !P.recipes.some((d) => d.id === r.id));
+    S.recipes = clone(P.recipes).concat(own);
+    S.weekMenu = clone(P.weekMenu);
+    S.mealSlots = S.mealSlots.map((s) => { const d = P.mealSlots.find((x) => x.id === s.id); return d ? Object.assign({}, s, { time: d.time }) : s; });
+    S.planV = P.version;
+    return S;
+  }
   function load() {
-    try { const raw = localStorage.getItem(KEY); return raw ? merge(defaults(), JSON.parse(raw)) : defaults(); }
+    try { const raw = localStorage.getItem(KEY); return raw ? migrate(merge(defaults(), Object.assign({ planV: 0 }, JSON.parse(raw)))) : defaults(); }
     catch (e) { console.warn(e); return defaults(); }
   }
   App.S = load();

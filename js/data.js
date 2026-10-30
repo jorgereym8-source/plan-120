@@ -71,8 +71,51 @@
     salmorejo:   { n: 'Salmorejo (brik)', k: 105, p: 1.6, c: 7, f: 8, fib: 1, sec: 'Lácteos y huevos', pack: 1000, packN: 'brik 1 L', price: 2.19 },
     gazpacho:    { n: 'Gazpacho (brik)', k: 45, p: 1, c: 4, f: 2.8, fib: 1, sec: 'Lácteos y huevos', pack: 1000, packN: 'brik 1 L', price: 1.49 },
     guacamole:   { n: 'Guacamole', k: 165, p: 1.8, c: 5, f: 15, fib: 4, sec: 'Lácteos y huevos', pack: 200, packN: 'tarrina 200 g', price: 1.8 },
+    harinamaiz:  { n: 'Harina de maíz precocida (arepas)', k: 360, p: 8, c: 77, f: 1.5, fib: 7, sec: 'Despensa', pack: 1000, packN: 'paquete 1 kg', price: 1.5 },
+    mayolight:   { n: 'Mayonesa ligera', k: 300, p: 1, c: 6, f: 30, fib: 0, sec: 'Despensa', pack: 430, packN: 'bote', price: 2.2 },
     barqueta:    { n: 'Ensalada barqueta con pollo (tipo Florette Xtreme, 210 g)', k: 160, p: 9, c: 9, f: 10, fib: 1.5, sec: 'Fruta y verdura', pack: 210, packN: 'barqueta 210 g', price: 3.79 }
   };
+
+
+  /* ---------- Medidas caseras: [gramos por medida, singular, plural] ----------
+     Pesa una vez cada recipiente la primera semana para calibrarlo; luego usa la medida casera. */
+  const CAS = {
+    skyr: [250, 'vaso', 'vasos'], yopro: [120, 'yogur', 'yogures'], leche: [250, 'vaso', 'vasos'], yogurnat: [125, 'yogur', 'yogures'],
+    huevo: [60, 'huevo', 'huevos'], claras: [250, 'vaso', 'vasos'], quesolight: [20, 'loncha', 'lonchas'], mozzarella: [30, 'puñado', 'puñados'],
+    quesorallado: [7, 'cda. sopera', 'cdas. soperas'], pollo: [120, 'filete mediano', 'filetes medianos'], muslos: [90, 'jamoncito', 'jamoncitos'],
+    cerdo: [40, 'medallón (2 dedos)', 'medallones (2 dedos)'], pollomechado: [50, 'puñado', 'puñados'], kebab: [50, 'puñado', 'puñados'],
+    pavo: [15, 'loncha', 'lonchas'], jamon: [15, 'loncha', 'lonchas'], atun: [56, 'lata pequeña', 'latas pequeñas'], merluza: [125, 'lomo', 'lomos'],
+    avena: [10, 'cda. sopera colmada', 'cdas. soperas colmadas'], weetabix: [35, 'bol pequeño', 'boles pequeños'], granola: [10, 'cda. sopera', 'cdas. soperas'],
+    pb: [10, 'cdita. colmada', 'cditas. colmadas'], miel: [7, 'cdita.', 'cditas.'], arroz: [45, 'vasito de arroz cocido (125 g)', 'vasitos de arroz cocido (125 g)'],
+    pasta: [80, 'puñado', 'puñados'], garbanzos: [400, 'bote escurrido', 'botes escurridos'], lentejas: [400, 'bote escurrido', 'botes escurridos'],
+    maiz: [140, 'lata', 'latas'], tomatetri: [15, 'cda. sopera', 'cdas. soperas'], aceite: [5, 'cdita.', 'cditas.'], palomitas: [10, 'cda. sopera', 'cdas. soperas'],
+    whey: [30, 'cacito', 'cacitos'], choco85: [10, 'onza', 'onzas'], nocilla: [10, 'cdita. colmada', 'cditas. colmadas'], pikotas: [6, 'caramelo', 'caramelos'],
+    minirelleno: [30, 'unidad', 'unidades'], cola: [330, 'lata', 'latas'], zumo: [250, 'vaso', 'vasos'], pan: [30, 'rebanada', 'rebanadas'],
+    tortilla: [40, 'tortilla', 'tortillas'], masapizza: [260, 'rollo', 'rollos'], platano: [120, 'plátano mediano', 'plátanos medianos'],
+    fruta: [150, 'pieza', 'piezas'], frutosrojos: [50, 'puñado', 'puñados'], mango: [50, 'puñado', 'puñados'], acai: [100, 'sobre', 'sobres'],
+    ensalada: [50, 'puñado grande', 'puñados grandes'], tomate: [150, 'tomate mediano', 'tomates medianos'], pimiento: [150, 'pimiento o cebolla mediano', 'pimientos/cebollas medianos'],
+    champi: [40, 'puñado', 'puñados'], patata: [150, 'papa mediana', 'papas medianas'], verduras: [100, 'taza', 'tazas'], noquis: [50, 'puñado', 'puñados'],
+    tortellini: [250, 'bandeja', 'bandejas'], salmorejo: [250, 'vaso', 'vasos'], gazpacho: [250, 'vaso', 'vasos'], guacamole: [15, 'cda. sopera', 'cdas. soperas'],
+    barqueta: [210, 'barqueta', 'barquetas'], harinamaiz: [35, 'arepa mediana', 'arepas medianas'], mayolight: [15, 'cda. sopera', 'cdas. soperas']
+  };
+  Object.keys(CAS).forEach(function (k) { if (foods[k]) foods[k].cas = CAS[k]; });
+
+  /* "1½", "¾", "2⅓"… redondeado a la fracción doméstica más cercana */
+  const DISCRETE = ['huevo', 'yopro', 'yogurnat', 'quesolight', 'pollo', 'muslos', 'cerdo', 'pavo', 'jamon', 'atun', 'merluza', 'whey', 'choco85', 'pikotas', 'minirelleno', 'cola', 'pan', 'tortilla', 'platano', 'fruta', 'acai', 'tomate', 'patata', 'barqueta', 'harinamaiz'];
+  function fracTxt(q, discrete) {
+    if (q < 0.15) return null;
+    const opts = discrete ? [[0, ''], [0.5, '½'], [1, '']] : [[0, ''], [0.25, '¼'], [0.5, '½'], [0.75, '¾'], [1, '']];
+    let w = Math.floor(q); const r = q - w; let best = opts[0];
+    opts.forEach(function (o) { if (Math.abs(r - o[0]) < Math.abs(r - best[0])) best = o; });
+    if (best[0] === 1) w += 1;
+    return (w ? String(w) : '') + best[1] || '¼';
+  }
+  function casera(id, g, db) {
+    const fd = (db || foods)[id]; if (!fd || !fd.cas) return '';
+    const q = g / fd.cas[0]; const t = fracTxt(q, DISCRETE.indexOf(id) >= 0);
+    if (!t) return 'un poco (menos de ¼ ' + fd.cas[1] + ')';
+    return t + ' ' + (q > 1.15 ? fd.cas[2] : fd.cas[1]);
+  }
 
   /* ---------- Recetas / opciones de comida ----------
      slot: desayuno | media | almuerzo | merienda | cena | capricho
@@ -157,12 +200,24 @@
       ing: [['skyr', 200], ['avena', 20], ['fruta', 100]], steps: ['Merienda de días sin entreno.'] },
 
     // ---------- CENAS ----------
-    { id: 'c1', slot: 'cena', name: 'Fajitas de kebab de pollo con salsa de yogur', main: true, prep: 15,
+    { id: 'c1', slot: 'cena', name: 'Fajitas de kebab con queso y mayonesa ligera', main: true, prep: 15,
+      tags: ['casa', 'compartir', 'favorita de Nati'],
+      ing: [['tortilla', 80], ['kebab', 130], ['pimiento', 200], ['mozzarella', 30], ['mayolight', 15], ['ensalada', 40]],
+      nati: 'Nati: su versión con mayonesa normal y el queso que quiera. Tú: 1 cda. de mayonesa ligera medida y 1 puñado de queso.',
+      steps: ['Saltea pimiento y cebolla en tiras; añade el kebab 4 min.', 'Calienta las tortillas, reparte el relleno, el queso y la cucharada de mayonesa ligera.', '2 tortillas bien cargadas. Si repites, la 3.ª solo con verdura y pollo (≈ +170 kcal).'] },
+    { id: 'c1b', slot: 'cena', name: 'Fajitas de kebab con salsa de yogur (versión ligera)', prep: 15,
       tags: ['casa', 'compartir'],
       ing: [['tortilla', 80], ['kebab', 150], ['pimiento', 200], ['yogurnat', 60], ['ensalada', 40]],
-      steps: ['Saltea pimiento y cebolla en tiras; añade el kebab 4 min.', 'Salsa: yogur natural + ajo en polvo + comino + limón + sal.', '2 tortillas bien cargadas. Si repites, la 3.ª tortilla solo con verdura y pollo.'] },
+      nati: 'Nati puede tomar las suyas con mayonesa y queso; el relleno es el mismo.',
+      steps: ['Saltea pimiento y cebolla en tiras; añade el kebab 4 min.', 'Salsa: yogur natural + ajo en polvo + comino + limón + sal.', '2 tortillas bien cargadas.'] },
+    { id: 'c8', slot: 'cena', name: 'Arepas de pollo mechado con queso y guacamole', prep: 20,
+      tags: ['casa', 'compartir', 'favorita de Nati'],
+      ing: [['harinamaiz', 70], ['pollomechado', 120], ['mozzarella', 30], ['guacamole', 30], ['tomate', 100], ['ensalada', 40]],
+      nati: 'Mismo relleno para los dos; Nati puede añadir más queso o mayonesa. Con 1 taza de harina (≈140 g) salen 4 arepas: 2 para cada uno.',
+      steps: ['Masa: harina de maíz + agua tibia + sal (≈ 1 taza de harina por 1¼ tazas de agua). Reposa 3 min.', 'Haz bolas, aplánalas a 1 cm y dóralas en sartén antiadherente 5–6 min por lado (o en la freidora de aire).', 'Ábrelas y rellena con pollo mechado, queso, guacamole y tomate.', 'Versión kebab: cambia el pollo por 120 g de carne de kebab (≈ +30 kcal).'] },
     { id: 'c2', slot: 'cena', name: 'Pizza casera proteica', prep: 20,
-      tags: ['casa', 'viernes'],
+      tags: ['casa', 'viernes', 'favorita de Nati'],
+      nati: 'Pizza compartida: cada uno decora su mitad. Tu mitad con pollo y champiñón; la de Nati, como quiera.',
       ing: [['masapizza', 125], ['tomatetri', 60], ['mozzarella', 60], ['pollomechado', 80], ['champi', 80]],
       steps: ['Media masa fina por persona (corta el rollo en 2).', 'Tomate, champiñón, pollo mechado y mozzarella light.', '12–14 min a 220 °C. Acompaña con ensalada si te quedas con hambre.', 'Versión rápida: media pizza fresca refrigerada + 100 g de pollo encima + ensalada (≈650 kcal).'] },
     { id: 'c3', slot: 'cena', name: 'Salmorejo completo con huevo, jamón y pollo', prep: 5,
@@ -199,8 +254,8 @@
   const mealSlots = [
     { id: 'desayuno', name: 'Desayuno', time: '06:45', kcal: 450, protein: 35, icon: '🥣' },
     { id: 'media',    name: 'Media mañana', time: '10:30', kcal: 180, protein: 20, icon: '🥛' },
-    { id: 'almuerzo', name: 'Almuerzo (táper)', time: '13:30', kcal: 590, protein: 45, icon: '🍱' },
-    { id: 'merienda', name: 'Merienda / pre-entreno', time: '17:30', kcal: 250, protein: 22, icon: '🍌' },
+    { id: 'almuerzo', name: 'Almuerzo (táper)', time: '13:45', kcal: 590, protein: 45, icon: '🍱' },
+    { id: 'merienda', name: 'Merienda / pre-entreno', time: '17:00', kcal: 250, protein: 22, icon: '🍌' },
     { id: 'cena',     name: 'Cena', time: '20:45', kcal: 590, protein: 45, icon: '🍽️' },
     { id: 'capricho', name: 'Capricho pactado', time: 'libre', kcal: 120, protein: 0, icon: '🍫' }
   ];
@@ -213,10 +268,10 @@
     lun: { desayuno: 'd1', media: 's1', almuerzo: 'a1', merienda: 'p1', cena: 'c4', capricho: 't1' },
     mar: { desayuno: 'd1', media: 's5', almuerzo: 'a2', merienda: 'p4', cena: 'c1', capricho: 't2' },
     mie: { desayuno: 'd2', media: 's1', almuerzo: 'a3', merienda: 'p1', cena: 'c3', capricho: 't5' },
-    jue: { desayuno: 'd1', media: 's4', almuerzo: 'a6', merienda: 'p4', cena: 'c7', capricho: 't3' },
+    jue: { desayuno: 'd1', media: 's4', almuerzo: 'a6', merienda: 'p4', cena: 'c8', capricho: 't3' },
     vie: { desayuno: 'd3', media: 's1', almuerzo: 'a5', merienda: 'p1', cena: 'c2', capricho: 't6' },
     sab: { desayuno: 'd4', media: 's6', almuerzo: 'fuera', merienda: 'p4', cena: 'c5', capricho: 't1' },
-    dom: { desayuno: 'd5', media: 's2', almuerzo: 'a4', merienda: 'p2', cena: 'c6', capricho: 't4' }
+    dom: { desayuno: 'd5', media: 's2', almuerzo: 'a4', merienda: 'p2', cena: 'c7', capricho: 't4' }
   };
 
   /* ---------- Entrenamiento de fuerza: 2 días / semana, cuerpo completo ---------- */
@@ -468,7 +523,7 @@
   ];
 
   const PLAN = {
-    version: 3,
+    version: 4,
     defaultStart: '2026-11-02',
     targets: { kcal: 2100, kcalMin: 2000, kcalMax: 2200, protein: 170, proteinMin: 160, proteinMax: 185, fat: 62, fatMin: 55, fatMax: 75, carbs: 220, carbsMin: 190, carbsMax: 250, fiber: 30, water: 2.75, steps: 8000, sleep: 7.25, treatKcal: 150, maintenanceMin: 2550, maintenanceMax: 2850 },
     foods, recipes, mealSlots, days, dayNames, weekMenu,
@@ -479,6 +534,8 @@
   };
 
   /* Cálculo de macros de una receta */
+  PLAN.casera = casera;
+  PLAN.fracTxt = fracTxt;
   PLAN.macros = function (ing, foodsDb) {
     const db = foodsDb || foods;
     const t = { k: 0, p: 0, c: 0, f: 0, fib: 0 };

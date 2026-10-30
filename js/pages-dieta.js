@@ -13,11 +13,11 @@
   /* ---------- receta: modal editable ---------- */
   function recipeHTML(r) {
     const m = A.macros(r.ing); const isDefault = P.recipes.some((x) => x.id === r.id);
-    return '<div id="rm">' + macroBox(m) + '</div>' +
+    return '<div id="rm">' + macroBox(m) + '</div>' + (r.nati ? '<div class="sub-card">👫 ' + esc(r.nati) + '</div>' : '') +
       '<div class="grid2">' + '<label class="fld"><span>Nombre</span><input data-on="rField" data-f="name" data-r="' + r.id + '" value="' + esc(r.name) + '"></label>' +
       '<label class="fld"><span>Momento</span><select data-on="rField" data-f="slot" data-r="' + r.id + '">' + A.S.mealSlots.map((s) => '<option value="' + s.id + '"' + (s.id === r.slot ? ' selected' : '') + '>' + esc(s.name) + '</option>').join('') + '</select></label></div>' +
       '<h4>Ingredientes <small class="muted">(edita los gramos y las macros se recalculan)</small></h4><div class="ings">' +
-      r.ing.map((x, i) => { const fd = A.S.foods[x[0]] || { n: x[0] }; const u = fd.unit ? '<small class="muted">≈ ' + num(x[1] / fd.unit, 1) + ' ' + esc(fd.unitN) + '</small>' : ''; return '<div class="ing"><span>' + esc(fd.n) + u + '</span><input type="number" inputmode="decimal" data-live data-on="ingGram" data-r="' + r.id + '" data-i="' + i + '" value="' + x[1] + '"><em>g</em><button class="icon-btn sm" data-act="delIng" data-r="' + r.id + '" data-i="' + i + '">✕</button></div>'; }).join('') + '</div>' +
+      r.ing.map((x, i) => { const fd = A.S.foods[x[0]] || { n: x[0] }; const cs = P.casera(x[0], x[1], A.S.foods); const u = cs ? '<small class="cas">≈ ' + esc(cs) + '</small>' : ''; return '<div class="ing"><span>' + esc(fd.n) + u + '</span><input type="number" inputmode="decimal" data-live data-on="ingGram" data-r="' + r.id + '" data-i="' + i + '" value="' + x[1] + '"><em>g</em><button class="icon-btn sm" data-act="delIng" data-r="' + r.id + '" data-i="' + i + '">✕</button></div>'; }).join('') + '</div>' +
       '<div class="ing add"><select id="niF">' + foodOpts() + '</select><input id="niG" type="number" inputmode="decimal" placeholder="g"><button class="btn sm" data-act="addIng" data-r="' + r.id + '">Añadir</button></div>' +
       '<h4>Preparación</h4><textarea rows="5" data-on="rSteps" data-r="' + r.id + '">' + esc((r.steps || []).join('\n')) + '</textarea>' +
       '<label class="fld"><span>Etiquetas (separadas por comas)</span><input data-on="rTags" data-r="' + r.id + '" value="' + esc((r.tags || []).join(', ')) + '"></label>' +
@@ -27,7 +27,7 @@
   function openRecipe(id) { const r = A.recipe(id); if (!r) return; A.modal(recipeHTML(r), { title: 'Receta', onClose: () => setTimeout(A.rerender, 0) }); }
   function refreshRecipe(id, full) { const r = A.recipe(id); if (!r) return; if (full) { const b = document.querySelector('#modal .modal-body'); if (b) b.innerHTML = recipeHTML(r); } else { const el = document.getElementById('rm'); if (el) el.innerHTML = macroBox(A.macros(r.ing)); } }
   A.act.viewRecipe = (el) => openRecipe(el.dataset.id);
-  A.act.ingGram = (el) => { const r = A.recipe(el.dataset.r); r.ing[+el.dataset.i][1] = +String(el.value).replace(',', '.') || 0; A.save(); refreshRecipe(r.id); };
+  A.act.ingGram = (el) => { const r = A.recipe(el.dataset.r); const it = r.ing[+el.dataset.i]; it[1] = +String(el.value).replace(',', '.') || 0; A.save(); refreshRecipe(r.id); const sm = el.parentNode.querySelector('.cas'); if (sm) sm.textContent = '≈ ' + P.casera(it[0], it[1], A.S.foods); };
   A.act.delIng = (el) => { const r = A.recipe(el.dataset.r); r.ing.splice(+el.dataset.i, 1); A.save(); refreshRecipe(r.id, true); };
   A.act.addIng = (el) => { const r = A.recipe(el.dataset.r); const g = +document.getElementById('niG').value; if (!g) return A.toast('Indica los gramos'); r.ing.push([document.getElementById('niF').value, g]); A.save(); refreshRecipe(r.id, true); };
   A.act.rField = (el) => { const r = A.recipe(el.dataset.r); r[el.dataset.f] = el.value; A.save(); };
@@ -73,7 +73,7 @@
     const txt = 'Lista de la compra · Plan 120\n' + lines.join('\n');
     if (navigator.share) navigator.share({ text: txt }).catch(() => {}); else navigator.clipboard.writeText(txt).then(() => A.toast('Lista copiada'));
   };
-  const BASICS = ['Especias: pimentón, orégano, comino, curry, ajo en polvo, sazonador fajitas', 'Limones', 'Café / infusiones', 'Agua con gas', 'Refrescos zero / Nestea zero', 'Caldo de verduras o pollo', 'Vinagre y sal', 'Spray de aceite (opcional)', 'Edulcorante / canela / cacao puro'];
+  const BASICS = ['Para Nati: mayonesa normal y queso extra (fajitas y arepas)', 'Especias: pimentón, orégano, comino, curry, ajo en polvo, sazonador fajitas', 'Limones', 'Café / infusiones', 'Agua con gas', 'Refrescos zero / Nestea zero', 'Caldo de verduras o pollo', 'Vinagre y sal', 'Spray de aceite (opcional)', 'Edulcorante / canela / cacao puro'];
 
   /* ---------- alimentos ---------- */
   A.act.editFood = (el) => {
@@ -140,6 +140,7 @@
         h += '<div class="chips scroll">' + [['all', 'Todas']].concat(S.mealSlots.map((s) => [s.id, s.name])).map((x) => '<button class="chip ' + (slot === x[0] ? 'on' : '') + '" data-act="recipeSlot" data-s="' + x[0] + '">' + esc(x[1]) + '</button>').join('') + '</div>';
         h += '<div class="row gap"><input class="search" placeholder="Buscar receta o etiqueta…" value="' + esc(S.ui.recipeQ || '') + '" data-live data-on="recipeSearch"><button class="btn sm" data-act="newRecipe">+ Nueva</button></div>';
         h += '<div id="rlist">' + recipeList() + '</div>';
+        h += '<details class="card"><summary><b>📏 Guía de medidas caseras</b> (sin báscula)</summary><p class="muted small">La primera semana pesa una vez tus recipientes (tu vaso, tu cuchara, tu bol) para calibrar; después basta la medida casera. Las cantidades son aproximadas: lo importante es repetir siempre la misma medida.</p><div class="tbl">' + Object.keys(S.foods).filter((k) => S.foods[k].cas).sort((a, b) => S.foods[a].n.localeCompare(S.foods[b].n, 'es')).map((k) => '<div class="row cas-row"><span>' + esc(S.foods[k].n) + '</span><b>1 ' + esc(S.foods[k].cas[1]) + ' ≈ ' + S.foods[k].cas[0] + ' g</b></div>').join('') + '</div><h4>Método de la mano (para comer fuera o en casa de otros)</h4><ul class="ticks small"><li>Proteína: 1–2 palmas (sin dedos) por comida ≈ 30–45 g de proteína.</li><li>Carbohidratos (arroz, pasta, papas): 1–1½ puños cerrados.</li><li>Verduras: 2 puños o más (libre).</li><li>Grasas (aceite, salsas, frutos secos): 1 pulgar.</li></ul></details>';
         h += '<div class="card"><h3>Snacks ricos en proteína (≈150–250 kcal)</h3><ul class="ticks"><li>2 yogures proteicos (≈150 kcal · 23 g)</li><li>Skyr/queso batido 200 g + fruta (≈175 kcal · 21 g)</li><li>Pollo mechado 100 g + fruta (≈220 kcal · 24 g)</li><li>Sándwich de pavo y queso light (≈220 kcal · 20 g)</li><li>Lata de atún al natural + 1 rebanada (≈150 kcal · 18 g)</li><li>Batido: 300 ml de leche desnatada + 25 g de whey (≈200 kcal · 30 g)</li><li>2 huevos cocidos + fruta (≈250 kcal · 16 g)</li><li>Postre de skyr con cacao puro y canela (≈120 kcal · 20 g)</li></ul></div>';
         h += '<div class="card"><h3>Antes y después de entrenar</h3><ul class="ticks"><li><b>60–90 min antes:</b> plátano + 2 yogures proteicos, tostada de pavo con miel o el batido de leche y plátano.</li><li><b>Si entrenas justo al salir:</b> la merienda a las 17:00 y un plátano en el coche/tranvía.</li><li><b>Después:</b> la cena ES tu comida post-entreno (40–50 g de proteína + carbohidrato). No necesitas batido salvo que cenes más de 2 h después.</li><li><b>Durante:</b> solo agua (500–750 ml).</li></ul></div>';
       }
