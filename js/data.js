@@ -318,7 +318,7 @@
     'Semanas 1–2: RIR 3–4 para calibrar cargas y técnica. A partir de la semana 3: RIR 1–2 en la última serie.',
     'En déficit lo normal es mantener o subir poco la fuerza. Mantenerla = estás conservando músculo.',
     'Si un ejercicio baja de rendimiento 2 sesiones seguidas: quita 1 serie a todo durante 1 semana y revisa sueño y calorías.',
-    'Navidad (semanas 8–9): misma carga, 1 serie menos por ejercicio (descarga).',
+    'Navidad (semanas 3–4): misma carga, 1 serie menos por ejercicio (descarga).',
     'Dolor articular agudo (no agujetas) = cambia por la alternativa y no fuerces.',
     'Cardio extra en el gimnasio: 10–15 min de cinta inclinada al final solo si te sobra tiempo; los pasos diarios pesan más que esto.'
   ];
@@ -393,32 +393,42 @@
   /* ---------- Hoja de ruta de 17 semanas + día 120 ----------
      loss = rango de pérdida acumulada esperada (% del peso inicial) al final de la semana */
   const roadmap = [
-    { w: 1,  phase: 'Arranque', kcal: '2.000–2.200', steps: 'Mide tu línea base', run: false, focus: 'Pésate cada mañana, apunta pasos y deja el desayuno hecho la noche anterior.', gymNote: 'RIR 3–4: calibrar cargas', loss: [0.8, 2.0] },
-    { w: 2,  phase: 'Arranque', kcal: '2.000–2.200', steps: 'Línea base + 1.000 (≈7.000)', run: true, focus: 'Proteína en cada comida (5 tomas de 20–45 g).', gymNote: 'RIR 3: técnica', loss: [1.2, 2.6] },
-    { w: 3,  phase: 'Arranque', kcal: '2.000–2.200', steps: '≈7.000', run: false, focus: 'Agua: 500 ml al despertar + botella de 1 L en el trabajo, dos veces.', gymNote: 'RIR 2: empieza la progresión', loss: [1.6, 3.2] },
-    { w: 4,  phase: 'Arranque', kcal: '2.000–2.200', steps: '≈8.000', run: true, focus: 'Capricho pactado: uno al día, servido en plato y sentado. Refrescos → zero.', gymNote: 'RIR 1–2', loss: [2.0, 3.8], review: 'Revisión del mes 1 (día 28–30)' },
-    { w: 5,  phase: 'Progresión', kcal: 'Según revisión', steps: '≈8.000', run: false, focus: 'Paseo "reset" de 10 min después de comer o al levantarte de la siesta.', gymNote: 'RIR 1–2', loss: [2.4, 4.4] },
-    { w: 6,  phase: 'Progresión', kcal: 'Según revisión', steps: '≈8.500', run: true, focus: 'Sueño: pantallas fuera a las 22:30, en la cama a las 22:45–23:00.', gymNote: 'RIR 1–2', loss: [2.8, 5.0] },
-    { w: 7,  phase: 'Progresión', kcal: 'Según revisión', steps: '≈8.500', run: false, focus: 'Comer fuera con la regla del plato (ensayo general para Navidad).', gymNote: 'RIR 1–2', loss: [3.2, 5.6] },
-    { w: 8,  phase: 'Navidad · mantenimiento consciente', kcal: '2.400–2.600 (mantener)', steps: '≥ 9.000', run: true, focus: 'Objetivo: NO perder, mantener. Solo las comidas señaladas son de fiesta; el resto, plan normal.', gymNote: 'Descarga: 1 serie menos', loss: [3.0, 5.6] },
-    { w: 9,  phase: 'Navidad · mantenimiento consciente', kcal: '2.400–2.600 (mantener)', steps: '≥ 9.000', run: false, focus: 'Fin de año y Reyes: proteína + paseo largo al día siguiente; nada de compensar sin comer.', gymNote: 'Descarga: 1 serie menos', loss: [2.8, 5.6], review: 'Revisión del mes 2 (día 60)' },
-    { w: 10, phase: 'Déficit principal', kcal: 'Vuelve al objetivo', steps: '≈9.000', run: true, focus: 'Reinicio de 3 días: proteína alta, pasos y batch cooking el domingo.', gymNote: 'RIR 2 y vuelve a progresar', loss: [3.4, 6.2] },
-    { w: 11, phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈9.000', run: false, focus: 'Doble ración de verdura en almuerzo y cena (más volumen, mismas calorías).', gymNote: 'RIR 1–2', loss: [3.8, 6.8] },
-    { w: 12, phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈9.500', run: true, focus: 'Revisión de despensa: los dulces de Nati en su armario, tus caprichos en ración.', gymNote: 'RIR 1–2', loss: [4.2, 7.4] },
-    { w: 13, phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈10.000', run: false, focus: 'Recados a pie: todo lo que esté a menos de 20 min, andando.', gymNote: 'RIR 1–2', loss: [4.6, 8.0], review: 'Revisión del mes 3 (día 90)' },
-    { w: 14, phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈10.000', run: true, focus: 'Comer fuera: decide qué vas a pedir antes de mirar la carta.', gymNote: 'RIR 1–2', loss: [5.0, 8.6] },
-    { w: 15, phase: 'Carnaval', kcal: 'Objetivo (días de fiesta a mantenimiento)', steps: '≈10.000 (bailar cuenta)', run: false, focus: 'Plan de Carnaval: cena de proteína ANTES de salir y agua siempre en la mano.', gymNote: 'RIR 1–2', loss: [5.4, 9.2] },
-    { w: 16, phase: 'Cierre', kcal: 'Objetivo ajustado', steps: '≈10.000', run: true, focus: 'Ensaya el mantenimiento: un día a la semana a +300 kcal y observa cómo responde el peso.', gymNote: 'Intenta récords en los básicos (RIR 1)', loss: [5.8, 9.8] },
-    { w: 17, phase: 'Cierre', kcal: 'Objetivo ajustado', steps: '≈10.000', run: false, focus: 'Mediciones finales (día 120): peso medio, cintura, fotos, fuerza, test de carrera y bioimpedancia.', gymNote: 'Test de fuerza: mejor serie de 5', loss: [6.2, 10.4], review: 'Revisión final (día 120) + plan de mantenimiento' }
+    { w: 1,  phase: 'Arranque', kcal: '2.000–2.200', steps: 'Tu línea base de noviembre + 1.000', run: false, focus: 'Proteína en las 5 comidas y pesarte cada mañana (ya practicado en noviembre).', gymNote: 'RIR 2–3: cargas de noviembre como punto de partida', loss: [0.8, 2.0] },
+    { w: 2,  phase: 'Arranque', kcal: '2.000–2.200', steps: 'Línea base + 1.000', run: true, focus: 'Comidas y cenas de empresa de Navidad: regla del plato y «1 de 3» (pan, postre o bebida azucarada).', gymNote: 'RIR 2', loss: [1.2, 2.6] },
+    { w: 3,  phase: 'Navidad · mantenimiento consciente', kcal: '2.400–2.600 (mantener)', steps: '≥ 9.000', run: false, focus: 'Objetivo: NO perder, mantener. Solo Nochebuena y Navidad son de fiesta; el resto de días, plan normal.', gymNote: 'Descarga: 1 serie menos', loss: [1.0, 2.6] },
+    { w: 4,  phase: 'Navidad · mantenimiento consciente', kcal: '2.400–2.600 (mantener)', steps: '≥ 9.000', run: true, focus: 'Nochevieja y Año Nuevo: proteína + paseo largo al día siguiente; nada de compensar sin comer.', gymNote: 'Descarga: 1 serie menos', loss: [0.8, 2.6] },
+    { w: 5,  phase: 'Déficit principal', kcal: 'Vuelve al objetivo', steps: '≈ 8.500', run: false, focus: 'Reyes (6 ene) y reinicio: 3 días de proteína alta, pasos y batch cooking el domingo.', gymNote: 'RIR 2 y vuelve a progresar', loss: [1.4, 3.2], review: 'Revisión del mes 1 (día 30 · 5 ene)' },
+    { w: 6,  phase: 'Déficit principal', kcal: 'Según revisión', steps: '≈ 8.500', run: true, focus: 'Agua: 500 ml al despertar + botella de 1 L en el trabajo, dos veces.', gymNote: 'RIR 1–2', loss: [1.8, 3.8] },
+    { w: 7,  phase: 'Déficit principal', kcal: 'Según revisión', steps: '≈ 9.000', run: false, focus: 'Paseo «reset» de 10 min después de comer o al levantarte de la siesta.', gymNote: 'RIR 1–2', loss: [2.2, 4.4] },
+    { w: 8,  phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈ 9.000', run: true, focus: 'Sueño: pantallas fuera a las 22:30, en la cama a las 22:45–23:00.', gymNote: 'RIR 1–2', loss: [2.6, 5.0] },
+    { w: 9,  phase: 'Carnaval', kcal: 'Objetivo (días de fiesta a mantenimiento)', steps: '≈ 9.500 (bailar cuenta)', run: false, focus: 'Plan de Carnaval: cena de proteína ANTES de salir y agua siempre en la mano.', gymNote: 'RIR 1–2 (sesión exprés si sales)', loss: [2.9, 5.5], review: 'Revisión del mes 2 (día 60 · 4 feb)' },
+    { w: 10, phase: 'Carnaval', kcal: 'Objetivo (días de fiesta a mantenimiento)', steps: '≈ 9.500', run: true, focus: 'Días de calle: 1 cosa de comida callejera y disfrutarla; al día siguiente, desayuno normal y paseo.', gymNote: 'RIR 1–2', loss: [3.2, 6.0] },
+    { w: 11, phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈ 9.500', run: false, focus: 'Doble ración de verdura en almuerzo y cena (más volumen, mismas calorías).', gymNote: 'RIR 1–2', loss: [3.6, 6.6] },
+    { w: 12, phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈ 10.000', run: true, focus: 'Revisión de despensa: los dulces de Nati en su armario, tus caprichos en ración.', gymNote: 'RIR 1–2', loss: [4.0, 7.2] },
+    { w: 13, phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈ 10.000', run: false, focus: 'Recados a pie: todo lo que esté a menos de 20 min, andando.', gymNote: 'RIR 1–2', loss: [4.4, 7.8], review: 'Revisión del mes 3 (día 90 · 6 mar)' },
+    { w: 14, phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈ 10.000', run: true, focus: 'Comer fuera: decide qué vas a pedir antes de mirar la carta.', gymNote: 'RIR 1–2', loss: [4.8, 8.4] },
+    { w: 15, phase: 'Déficit principal', kcal: 'Objetivo ajustado', steps: '≈ 10.000', run: false, focus: 'Ensaya el mantenimiento: un día a la semana a +300 kcal y observa cómo responde el peso.', gymNote: 'RIR 1–2', loss: [5.2, 9.0] },
+    { w: 16, phase: 'Semana Santa', kcal: 'Objetivo (festivos a mantenimiento)', steps: '≈ 10.000 (senderos, playa)', run: true, focus: 'Semana Santa: aprovecha los festivos para moverte (sendero, playa) y aplica las reglas de viaje y comer fuera.', gymNote: 'Intenta récords en los básicos (RIR 1)', loss: [5.4, 9.4] },
+    { w: 17, phase: 'Cierre', kcal: 'Objetivo ajustado', steps: '≈ 10.000', run: false, focus: 'Mediciones finales (día 120 · 5 abr): peso medio, cintura, fotos, fuerza, test de carrera y bioimpedancia.', gymNote: 'Test de fuerza: mejor serie de 5', loss: [5.8, 10.0], review: 'Revisión final (día 120) + plan de mantenimiento' }
   ];
 
   const phases = [
-    { name: 'Arranque', weeks: '1–4', goal: 'Instalar hábitos y medir tu línea base. Cargas cómodas, técnica impecable.' },
-    { name: 'Progresión', weeks: '5–7', goal: 'Primer ajuste de calorías con datos reales. Más pasos y entrenos con intensidad.' },
-    { name: 'Navidad · mantenimiento consciente', weeks: '8–9', goal: 'Pausa de dieta planificada: comer a mantenimiento para no ganar, descansar la cabeza y volver con fuerza.' },
-    { name: 'Déficit principal', weeks: '10–14', goal: 'El bloque más productivo: ajustar calorías con la tendencia, 9–10k pasos y fuerza estable.' },
-    { name: 'Carnaval', weeks: '15', goal: 'Gestionar fiestas sin perder la semana.' },
-    { name: 'Cierre', weeks: '16–17', goal: 'Mediciones finales y transición a mantenimiento.' }
+    { name: 'Mes de adaptación (noviembre)', weeks: '0', goal: 'Aprender el sistema sin presión: compras, recetas, rutinas de gimnasio, app y PDF. Sin objetivo de pérdida.' },
+    { name: 'Arranque', weeks: '1–2', goal: 'Empieza el déficit con los hábitos ya rodados. Comidas de empresa con reglas.' },
+    { name: 'Navidad · mantenimiento consciente', weeks: '3–4', goal: 'Pausa de dieta planificada: comer a mantenimiento para no ganar, descansar la cabeza y volver con fuerza.' },
+    { name: 'Déficit principal', weeks: '5–8 y 11–15', goal: 'Los bloques más productivos: ajustar calorías con la tendencia, 9–10k pasos y fuerza estable.' },
+    { name: 'Carnaval', weeks: '9–10', goal: 'Gestionar las fiestas sin perder las semanas.' },
+    { name: 'Semana Santa', weeks: '16', goal: 'Festivos con más movimiento y reglas de comer fuera.' },
+    { name: 'Cierre', weeks: '17', goal: 'Mediciones finales y transición a mantenimiento.' }
+  ];
+
+  /* ---------- Noviembre: mes de adaptación (antes del día 1) ---------- */
+  const prepWeeks = [
+    { from: '2026-11-02', name: 'Semana A · Conocer el sistema', tasks: ['Instala la app, importa tus datos (Progreso → Datos) y recorre todas las pestañas.', 'Lee el PDF: secciones 1 a 4 (plan en una página, análisis, calorías y alimentación).', 'Pésate cada mañana después del baño y apúntalo.', 'Primera compra con la lista de la app (Dieta → Compra).', 'Prueba 2 desayunos preparados la noche anterior.'] },
+    { from: '2026-11-09', name: 'Semana B · Gimnasio y medidas caseras', tasks: ['2 sesiones A y B con RIR 3–4: aprende la técnica y anota las cargas en la app.', 'Pesa una vez tu vaso, tu cuchara y tu bol para calibrar las medidas caseras.', 'Apunta los pasos de cada día: será tu línea base.', 'Prueba 3 almuerzos de táper distintos.'] },
+    { from: '2026-11-16', name: 'Semana C · Batch cooking y carrera', tasks: ['Primer batch cooking de domingo completo (60–75 min).', 'Sesión de carrera de referencia (nivel 0) con el temporizador de la app.', 'Menú del plan 3–4 días de la semana.', 'Lee el PDF: secciones 5 a 11 (snacks, compra, entreno, carrera, movilidad, hábitos y reglas).'] },
+    { from: '2026-11-23', name: 'Semana D · Rutinas completas', tasks: ['Menú del plan 5–7 días, marcando las comidas en la app.', 'Una comida fuera aplicando las reglas.', 'Sesión de movilidad semanal guiada + 5 min de meditación al día.', 'Mira cómo te sienta el horario: ajusta horas y recetas en la app.'] },
+    { from: '2026-11-30', name: 'Semana E · Ensayo general', tasks: ['Todo el plan como si ya hubiera empezado (sin preocuparte por el peso).', 'Revisión semanal de prueba el domingo (Progreso → Revisión).', 'Domingo 6 dic: cintura, fotos de inicio y lectura del PDF secciones 12 a 18.', 'Lunes 7 dic, en ayunas: peso de partida. ¡Empieza el día 1!'] }
   ];
 
   /* ---------- Hábitos y listas de verificación ---------- */
@@ -464,9 +474,9 @@
       do: ['Ese día: proteína alta, café antes de las 15:00, pasos sí; gimnasio con 1 serie menos o sesión exprés.', 'No es día para pesarse y sacar conclusiones.', 'Siesta de 20 min permitida (antes de las 17:00).'] },
     { id: 'stress', icon: '🧠', title: 'Semana de mucho estrés o trabajo', when: 'Oposición, entregas, imprevistos',
       do: ['Modo mínimo viable: desayuno preparado, proteína en cada comida, 6.000+ pasos y 1 sesión exprés.', 'Usa las opciones "sin cocinar": barqueta mejorada, salmorejo completo, yogures proteicos.', 'Mantener el peso una semana difícil también es un buen resultado.'] },
-    { id: 'xmas', icon: '🎄', title: 'Navidad', when: 'Semanas 8–9 (21 dic – 3 ene)',
+    { id: 'xmas', icon: '🎄', title: 'Navidad', when: 'Semanas 3–4 (21 dic – 3 ene)',
       do: ['Fechas de fiesta: Nochebuena, Navidad, Nochevieja, Año Nuevo y Reyes. El resto de días, plan normal.', 'En las comidas de fiesta: proteína primero, 1 plato de entrantes, 1 postre, turrón en raciones.', 'Paseo largo al día siguiente de cada fiesta.', 'Objetivo realista: salir de las fiestas con la misma media semanal (±1 kg).'] },
-    { id: 'carnaval', icon: '🎭', title: 'Carnaval', when: 'Semana 15 (mediados de febrero)',
+    { id: 'carnaval', icon: '🎭', title: 'Carnaval', when: 'Semanas 9–10 (febrero)',
       do: ['Cena de proteína y verdura en casa antes de salir.', 'Agua siempre en la mano; refresco zero si quieres algo con sabor.', 'Comida de la calle: elige 1 cosa y disfrútala; no un picoteo continuo.', 'Al día siguiente: desayuno normal, paseo y a la cama pronto.'] },
     { id: 'sick', icon: '🤒', title: 'Enfermo o lesionado', when: 'Resfriado, gripe o lesión',
       do: ['Con fiebre o síntomas por debajo del cuello: nada de entreno.', 'Come a mantenimiento (≈ +400 kcal) y mantén la proteína.', 'Vuelve con la sesión exprés y RIR 3 la primera semana.'] },
@@ -523,13 +533,13 @@
   ];
 
   const PLAN = {
-    version: 4,
-    defaultStart: '2026-11-02',
+    version: 5,
+    defaultStart: '2026-12-07', prepStart: '2026-11-02',
     targets: { kcal: 2100, kcalMin: 2000, kcalMax: 2200, protein: 170, proteinMin: 160, proteinMax: 185, fat: 62, fatMin: 55, fatMax: 75, carbs: 220, carbsMin: 190, carbsMax: 250, fiber: 30, water: 2.75, steps: 8000, sleep: 7.25, treatKcal: 150, maintenanceMin: 2550, maintenanceMax: 2850 },
     foods, recipes, mealSlots, days, dayNames, weekMenu,
     warmup, routines, expressSession, trainingRules,
     runLevels, runRules, mobility, meditation, breathing,
-    roadmap, phases, dailyChecklist, weeklyChecklist, rules, reviewQuestions, adjustRules,
+    roadmap, phases, prepWeeks, dailyChecklist, weeklyChecklist, rules, reviewQuestions, adjustRules,
     themes, fonts
   };
 

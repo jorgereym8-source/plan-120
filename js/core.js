@@ -37,6 +37,7 @@
       mealSlots: clone(P.mealSlots),
       routines: clone(P.routines),
       run: { level: 0, sessions: [], weekParity: 'par', preferredDay: 'mie' },
+      prep: {},
       logs: {},
       measures: {},
       comps: [],
@@ -72,12 +73,21 @@
   /* Migración: cuando cambian los datos del plan, se actualizan recetas, alimentos y menú por defecto
      sin tocar los registros (pesos, sesiones, fotos…) ni las recetas propias. */
   function migrate(S) {
-    if ((S.planV || 0) >= P.version) return S;
-    Object.keys(P.foods).forEach((k) => { if (!S.foods[k]) S.foods[k] = clone(P.foods[k]); else S.foods[k].cas = clone(P.foods[k].cas); });
-    const own = S.recipes.filter((r) => !P.recipes.some((d) => d.id === r.id));
-    S.recipes = clone(P.recipes).concat(own);
-    S.weekMenu = clone(P.weekMenu);
-    S.mealSlots = S.mealSlots.map((s) => { const d = P.mealSlots.find((x) => x.id === s.id); return d ? Object.assign({}, s, { time: d.time }) : s; });
+    const v = S.planV || 0;
+    if (v >= P.version) return S;
+    if (v < 4) {
+      Object.keys(P.foods).forEach((k) => { if (!S.foods[k]) S.foods[k] = clone(P.foods[k]); else S.foods[k].cas = clone(P.foods[k].cas); });
+      const own = S.recipes.filter((r) => !P.recipes.some((d) => d.id === r.id));
+      S.recipes = clone(P.recipes).concat(own);
+      S.weekMenu = clone(P.weekMenu);
+      S.mealSlots = S.mealSlots.map((s) => { const d = P.mealSlots.find((x) => x.id === s.id); return d ? Object.assign({}, s, { time: d.time }) : s; });
+    }
+    if (v < 5) {
+      /* inicio aplazado al 7 de diciembre: noviembre pasa a ser mes de adaptación */
+      if (S.profile.startDate === '2026-11-02') S.profile.startDate = P.defaultStart;
+      if (+S.profile.startWeight === 106.7) S.profile.startWeight = null;
+      if (+S.profile.startWaist === 114) S.profile.startWaist = null;
+    }
     S.planV = P.version;
     return S;
   }

@@ -3,6 +3,12 @@
   'use strict';
   const P = window.PLAN, A = window.App, esc = A.esc, num = A.num, f = A.f;
 
+  A.prepWeek = function (d) {
+    let idx = 0; P.prepWeeks.forEach((w, i) => { if (d >= w.from) idx = i; });
+    return idx >= 0 && A.dayN(d) < 1 ? { i: idx, w: P.prepWeeks[idx] } : null;
+  };
+  A.act.prepCheck = (el) => { const S = A.S; S.prep = S.prep || {}; const w = S.prep[el.dataset.w] = S.prep[el.dataset.w] || {}; w[el.dataset.i] = !w[el.dataset.i]; A.haptic(10); A.save(); A.rerender(); };
+
   function curDate() { return A.S.ui.hoyDate && A.S.ui.hoyDate <= A.today() ? A.S.ui.hoyDate : A.today(); }
 
   A.act.hoyPrev = () => { A.S.ui.hoyDate = A.addDays(curDate(), -1); A.save(); A.rerender(); };
@@ -57,13 +63,16 @@
       h += '<div class="datebar"><button class="icon-btn" data-act="hoyPrev">‹</button><div><b>' + (isToday ? 'Hoy' : P.dayNames[A.dayKey(d)]) + '</b> · ' + A.fmtDate(d, true) + '</div><button class="icon-btn" data-act="hoyNext"' + (isToday ? ' disabled' : '') + '>›</button>' + (!isToday ? '<button class="chip" data-act="hoyToday">Hoy</button>' : '') + '</div>';
 
       if (dn < 1) {
-        h += '<div class="card hero"><div class="kicker">Cuenta atrás</div><h1>Empiezas el ' + A.fmtDate(S.profile.startDate, true) + '</h1><p>Faltan <b>' + (1 - dn) + '</b> días. Usa estos días para preparar el terreno:</p><ul class="ticks"><li>Importa tu historial de peso (Progreso → Datos).</li><li>Revisa el menú semanal y haz la primera compra con la lista.</li><li>Prepara 2–3 tarros de desayuno y los tápers del lunes y martes.</li><li>Mide la cintura y hazte las fotos de inicio.</li><li>Pon a cargar los auriculares para la primera sesión.</li></ul><a class="btn" href="#plan">Ver la hoja de ruta</a></div>';
+        const pw = A.prepWeek(d);
+        h += '<div class="card hero"><div class="kicker">Mes de adaptación · faltan ' + (1 - dn) + ' días</div><h1>El plan empieza el ' + A.fmtDate(S.profile.startDate, true) + '</h1><p>Noviembre es para aprender el sistema sin presión: compras, recetas, gimnasio, app y PDF. Aún no hay objetivo de peso; si comes el menú del plan, ya habrá un pequeño déficit, y está bien.</p>' +
+          (pw ? '<div class="focus"><div><small>' + esc(pw.w.name) + '</small><div class="checks" style="margin-top:6px">' + pw.w.tasks.map((t, i) => { const on = ((S.prep || {})[pw.i] || {})[i]; return '<button class="checkrow ' + (on ? 'on' : '') + '" data-act="prepCheck" data-w="' + pw.i + '" data-i="' + i + '"><i>' + (on ? '✓' : '') + '</i>' + esc(t) + '</button>'; }).join('') + '</div></div></div>' : '') +
+          '<a class="btn" href="#plan">Ver el mes de adaptación y la hoja de ruta</a></div>';
       } else {
         const pct = Math.min(100, dn / 120 * 100);
         h += '<div class="card hero"><div class="kicker">' + A.icon('🗓️') + 'Día ' + Math.min(dn, 120) + ' de 120 · Semana ' + Math.min(w, 17) + ' · ' + esc(rw.phase) + '</div><h1>' + (dn > 120 ? 'Plan completado. Toca mantener.' : 'Constancia, no perfección' + name + '.') + '</h1><div class="pbar-t big"><div style="width:' + pct + '%"></div></div>' +
           '<div class="focus">' + A.icon('🎯') + '<div><small>Hábito de la semana</small><p>' + esc(rw.focus) + '</p></div></div></div>';
       }
-      if (!A.startWeight()) h += '<a class="card banner" href="#progreso/datos">' + A.icon('📥') + '<div><b>Importa tus datos de inicio</b><small>Peso inicial, historial y cintura: Progreso → Datos</small></div><span>›</span></a>';
+      if (!A.weightSeries().length) h += '<a class="card banner" href="#progreso/datos">' + A.icon('📥') + '<div><b>Importa tus datos de inicio</b><small>Peso inicial, historial y cintura: Progreso → Datos</small></div><span>›</span></a>';
 
       // Comidas
       const menu = A.menuFor(d); const intake = A.dayIntake(d); const meals = lg.meals || {};
@@ -128,6 +137,8 @@
       h += A.seg(sub, [['ruta', 'Hoja de ruta'], ['reglas', 'Situaciones'], ['habitos', 'Hábitos'], ['ajustes', 'Ajustes'], ['despues', 'Día 121+']], 'plan');
       const S = A.S; const sw = A.startWeight(); const curW = A.weekN();
       if (sub === 'ruta') {
+        const pwNow = A.prepWeek(A.today());
+        h += '<div class="card ' + (pwNow ? 'cur' : '') + '"><h3>Noviembre · mes de adaptación</h3><p class="muted small">Del 2 de noviembre al 6 de diciembre. Sin objetivo de peso: se trata de que el día 1 todo te salga de forma automática.</p>' + P.prepWeeks.map((w, i) => { const done = (S.prep || {})[i] || {}; const n = w.tasks.filter((_, j) => done[j]).length; return '<details' + (pwNow && pwNow.i === i ? ' open' : '') + '><summary><b>' + esc(w.name) + '</b> · desde el ' + A.fmtDate(w.from) + ' · ' + n + '/' + w.tasks.length + '</summary><div class="checks">' + w.tasks.map((t, j) => '<button class="checkrow ' + (done[j] ? 'on' : '') + '" data-act="prepCheck" data-w="' + i + '" data-i="' + j + '"><i>' + (done[j] ? '✓' : '') + '</i>' + esc(t) + '</button>').join('') + '</div></details>'; }).join('') + '</div>';
         h += '<div class="card"><h3>Fases</h3>' + P.phases.map((p) => '<div class="phase"><b>' + esc(p.name) + '</b><span class="pill">Sem. ' + p.weeks + '</span><p class="muted small">' + esc(p.goal) + '</p></div>').join('') + '</div>';
         h += '<div class="card"><h3>Objetivos de partida</h3><div class="kv"><span>Calorías</span><b>' + num(S.targets.kcalMin) + '–' + num(S.targets.kcalMax) + ' kcal (empieza en ' + num(S.targets.kcal) + ')</b><span>Proteína</span><b>' + S.targets.proteinMin + '–' + S.targets.proteinMax + ' g</b><span>Grasa</span><b>' + S.targets.fatMin + '–' + S.targets.fatMax + ' g</b><span>Carbohidratos</span><b>' + (S.targets.carbsMin || 190) + '–' + (S.targets.carbsMax || 250) + ' g</b><span>Fibra</span><b>≥ ' + S.targets.fiber + ' g</b><span>Agua</span><b>' + num(S.targets.water, 1) + '–3,5 L</b><span>Sueño</span><b>7–8 h</b><span>Gimnasio</span><b>2 sesiones/sem</b><span>Carrera</span><b>1 cada 2 semanas</b><span>Movilidad</span><b>1 sesión/sem + 5 min diarios</b></div></div>';
         h += P.roadmap.map((r) => {
@@ -153,7 +164,7 @@
       } else if (sub === 'ajustes') {
         h += '<div class="card"><h3>Cómo ajustar las calorías</h3><ul class="ticks">' + P.adjustRules.map((x) => '<li>' + esc(x) + '</li>').join('') + '</ul></div>';
         h += '<div class="card"><h3>Pérdida real de grasa vs. agua</h3><ul class="ticks"><li>El peso diario puede variar 0,5–2 kg por agua, sal, carbohidratos (glucógeno), contenido intestinal, sueño y agujetas.</li><li>Grasa: 1 kg ≈ 7.000–7.700 kcal. Con ~500 kcal de déficit, ≈0,5 kg por semana. Una bajada de 1,5 kg en dos días NO es grasa.</li><li>Señales de pérdida real: la media semanal baja 2–3 semanas seguidas, la cintura baja, la ropa queda mejor y la fuerza se mantiene.</li><li>Señales de agua: subida tras una comida salada o fuera, tras una sesión de pierna, tras dormir mal o los días con más carbohidratos.</li><li>Por eso: media de 7 días, comparación semana contra semana y decisiones cada 2 semanas.</li></ul></div>';
-        h += '<div class="card"><h3>Revisiones mensuales</h3><ul class="ticks"><li><b>Día 28–30:</b> tendencia del mes, cintura, fotos, fuerza y pasos. Primer ajuste de calorías si toca.</li><li><b>Día 60 (fin de Navidad):</b> ¿has mantenido? Planifica la vuelta.</li><li><b>Día 90:</b> ajuste fino y plan para Carnaval.</li><li><b>Día 120:</b> mediciones completas, bioimpedancia en el mismo aparato y plan de mantenimiento.</li></ul></div>';
+        h += '<div class="card"><h3>Revisiones mensuales</h3><ul class="ticks"><li><b>Día 30 (5 ene):</b> balance de las 2 semanas de déficit y de la Navidad (¿has mantenido?). Vuelta al objetivo de calorías.</li><li><b>Día 60 (4 feb):</b> tendencia de enero, cintura, fotos, fuerza y pasos. Ajuste de calorías si toca y plan de Carnaval.</li><li><b>Día 90 (6 mar):</b> ajuste fino y plan de Semana Santa.</li><li><b>Día 120 (5 abr):</b> mediciones completas, bioimpedancia en el mismo aparato y plan de mantenimiento.</li></ul></div>';
       } else {
         h += '<div class="card"><h3>Después del día 120</h3><ul class="ticks"><li><b>Transición (2–4 semanas):</b> sube 150–200 kcal por semana hasta que la media semanal se estabilice (tu mantenimiento real; probablemente 2.400–2.700 kcal).</li><li><b>Mantener 6–8 semanas</b> antes de otro bloque de déficit, si quieres seguir bajando. El cuerpo y la cabeza lo agradecen.</li><li><b>Hábitos que se quedan:</b> desayuno preparado, proteína en cada comida, 8–10k pasos, 2 días de fuerza, capricho pactado, reglas para comer fuera.</li><li><b>Alarma de mantenimiento:</b> si la media semanal sube más de 2 kg sobre tu peso objetivo durante 2 semanas, vuelves 2–3 semanas al plan de déficit. Sin dramas: es el termostato.</li><li><b>Pesarte</b> al menos 3 días por semana para siempre: lo que no se mide, se escapa (tu historial lo demuestra: las subidas llegan cuando dejas de pesarte).</li><li><b>Revisión trimestral:</b> cintura, fotos y fuerza.</li></ul></div>';
       }
